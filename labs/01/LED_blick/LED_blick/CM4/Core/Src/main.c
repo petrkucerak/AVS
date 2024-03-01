@@ -106,7 +106,6 @@ static void MX_ADC1_Init(void);
 static void MX_ADC3_Init(void);
 static void MX_ETH_Init(void);
 static void MX_FMC_Init(void);
-static void MX_HDMI_CEC_Init(void);
 static void MX_QUADSPI_Init(void);
 static void MX_RTC_Init(void);
 static void MX_SAI1_Init(void);
@@ -172,7 +171,6 @@ int main(void)
   MX_ADC3_Init();
   MX_ETH_Init();
   MX_FMC_Init();
-  MX_HDMI_CEC_Init();
   MX_QUADSPI_Init();
   MX_RTC_Init();
   MX_SAI1_Init();
@@ -379,7 +377,7 @@ static void MX_ETH_Init(void)
   * @param None
   * @retval None
   */
-static void MX_HDMI_CEC_Init(void)
+void MX_HDMI_CEC_Init(void)
 {
 
   /* USER CODE BEGIN HDMI_CEC_Init 0 */

@@ -77,6 +77,85 @@ void HAL_MspInit(void)
 }
 
 /**
+* @brief CEC MSP Initialization
+* This function configures the hardware resources used in this example
+* @param hcec: CEC handle pointer
+* @retval None
+*/
+void HAL_CEC_MspInit(CEC_HandleTypeDef* hcec)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+  if(hcec->Instance==CEC)
+  {
+  /* USER CODE BEGIN CEC_MspInit 0 */
+
+  /* USER CODE END CEC_MspInit 0 */
+
+  /** Initializes the peripherals clock
+  */
+    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_CEC;
+    PeriphClkInitStruct.CecClockSelection = RCC_CECCLKSOURCE_LSI;
+    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    /* Peripheral clock enable */
+    __HAL_RCC_CEC_CLK_ENABLE();
+
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+    /**HDMI_CEC GPIO Configuration
+    PB6     ------> CEC
+    */
+    GPIO_InitStruct.Pin = HDMI_CEC_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF5_CEC;
+    HAL_GPIO_Init(HDMI_CEC_GPIO_Port, &GPIO_InitStruct);
+
+    /* CEC interrupt Init */
+    HAL_NVIC_SetPriority(CEC_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(CEC_IRQn);
+  /* USER CODE BEGIN CEC_MspInit 1 */
+
+  /* USER CODE END CEC_MspInit 1 */
+  }
+
+}
+
+/**
+* @brief CEC MSP De-Initialization
+* This function freeze the hardware resources used in this example
+* @param hcec: CEC handle pointer
+* @retval None
+*/
+void HAL_CEC_MspDeInit(CEC_HandleTypeDef* hcec)
+{
+  if(hcec->Instance==CEC)
+  {
+  /* USER CODE BEGIN CEC_MspDeInit 0 */
+
+  /* USER CODE END CEC_MspDeInit 0 */
+    /* Peripheral clock disable */
+    __HAL_RCC_CEC_CLK_DISABLE();
+
+    /**HDMI_CEC GPIO Configuration
+    PB6     ------> CEC
+    */
+    HAL_GPIO_DeInit(HDMI_CEC_GPIO_Port, HDMI_CEC_Pin);
+
+    /* CEC interrupt DeInit */
+    HAL_NVIC_DisableIRQ(CEC_IRQn);
+  /* USER CODE BEGIN CEC_MspDeInit 1 */
+
+  /* USER CODE END CEC_MspDeInit 1 */
+  }
+
+}
+
+/**
 * @brief UART MSP Initialization
 * This function configures the hardware resources used in this example
 * @param huart: UART handle pointer
