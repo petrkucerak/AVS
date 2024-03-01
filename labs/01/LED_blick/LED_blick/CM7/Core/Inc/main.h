@@ -57,18 +57,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define JOY_RIGHT_Pin GPIO_PIN_5
-#define JOY_RIGHT_GPIO_Port GPIOK
-#define JOY_LEFT_Pin GPIO_PIN_4
-#define JOY_LEFT_GPIO_Port GPIOK
 #define OSC32_OUT_Pin GPIO_PIN_15
 #define OSC32_OUT_GPIO_Port GPIOC
 #define OSC32_IN_Pin GPIO_PIN_14
 #define OSC32_IN_GPIO_Port GPIOC
-#define JOY_UP_Pin GPIO_PIN_6
-#define JOY_UP_GPIO_Port GPIOK
-#define JOY_DOWN_Pin GPIO_PIN_3
-#define JOY_DOWN_GPIO_Port GPIOK
 #define TOUCH_INT_Pin GPIO_PIN_7
 #define TOUCH_INT_GPIO_Port GPIOK
 #define STLINK_TX_Pin GPIO_PIN_10
@@ -83,8 +75,6 @@ void Error_Handler(void);
 #define LED2_GPIO_Port GPIOI
 #define LED3_Pin GPIO_PIN_14
 #define LED3_GPIO_Port GPIOI
-#define JOY_SEL_Pin GPIO_PIN_2
-#define JOY_SEL_GPIO_Port GPIOK
 #define OSC_OUT_Pin GPIO_PIN_1
 #define OSC_OUT_GPIO_Port GPIOH
 #define OSC_IN_Pin GPIO_PIN_0
