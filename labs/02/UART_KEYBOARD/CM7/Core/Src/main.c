@@ -187,137 +187,128 @@ int main(void) {
 		}
 		HAL_Delay(100);
 
-		// HAL_GPIO_TogglePin(GPIOI, LED1_Pin);
-		// HAL_Delay(100); /* Insert delay 100 ms */
-
-		// HAL_GPIO_TogglePin(GPIOI, LED2_Pin);
-		// HAL_Delay(100); /* Insert delay 100 ms */
-
-		// HAL_GPIO_TogglePin(GPIOI, LED3_Pin);
-		// HAL_Delay(100); /* Insert delay 100 ms */
-
-		// HAL_GPIO_TogglePin(GPIOI, LED4_Pin);
-		// HAL_Delay(100); /* Insert delay 100 ms */
-
-		// HAL_GPIO_(GPIOJ, KEYBOARD_1_Pin);
-		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_1_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_1_Pin, GPIO_PIN_RESET);
 		if (!HAL_GPIO_ReadPin(GPIOF, KEYBOARD_4_Pin))
 			symbol = 1;
-		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_5_Pin))
-			symbol = 2;
-		if (!HAL_GPIO_ReadPin(GPIOA, KEYBOARD_6_Pin))
-			symbol = 3;
-		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_7_Pin))
-			symbol = 4;
-		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_1_Pin, GPIO_PIN_RESET);
-
-		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_2_Pin, GPIO_PIN_SET);
-		if (!HAL_GPIO_ReadPin(GPIOF, KEYBOARD_4_Pin))
-			symbol = 5;
-		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_5_Pin))
-			symbol = 6;
-		if (!HAL_GPIO_ReadPin(GPIOA, KEYBOARD_6_Pin))
-			symbol = 7;
-		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_7_Pin))
-			symbol = 8;
-		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_2_Pin, GPIO_PIN_RESET);
-
-		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_3_Pin, GPIO_PIN_SET);
-		if (!HAL_GPIO_ReadPin(GPIOF, KEYBOARD_4_Pin))
-			symbol = 9;
 		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_5_Pin))
 			symbol = 10;
 		if (!HAL_GPIO_ReadPin(GPIOA, KEYBOARD_6_Pin))
 			symbol = 11;
 		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_7_Pin))
-			symbol = 12;
+			symbol = 6;
+		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_1_Pin, GPIO_PIN_SET);
+
+		HAL_Delay(10);
+
+		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_2_Pin, GPIO_PIN_RESET);
+		if (!HAL_GPIO_ReadPin(GPIOF, KEYBOARD_4_Pin))
+			symbol = 2;
+		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_5_Pin))
+			symbol = 4;
+		if (!HAL_GPIO_ReadPin(GPIOA, KEYBOARD_6_Pin))
+			symbol = 9;
+		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_7_Pin))
+			symbol = 7;
+		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_2_Pin, GPIO_PIN_SET);
+
+		HAL_Delay(10);
+
 		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_3_Pin, GPIO_PIN_RESET);
+		if (!HAL_GPIO_ReadPin(GPIOF, KEYBOARD_4_Pin))
+			symbol = 3;
+		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_5_Pin))
+			symbol = 5;
+		if (!HAL_GPIO_ReadPin(GPIOA, KEYBOARD_6_Pin))
+			symbol = 0;
+		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_7_Pin))
+			symbol = 8;
+		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_3_Pin, GPIO_PIN_SET);
 
 		switch (symbol) {
+		case 0:
+			uint8_t tx_buff0[] = { 48 };
+			symbol = 15;
+			HAL_UART_Transmit(&huart1, tx_buff0, 1, 100);
+			HAL_Delay(100);
+			/* code */
+			break;
 		case 1:
-			uint8_t tx_buff1[] = { 49, 32 };
-			symbol = 0;
-			HAL_UART_Transmit(&huart1, tx_buff1, 2, 100);
+			uint8_t tx_buff1[] = { 49 };
+			symbol = 15;
+			HAL_UART_Transmit(&huart1, tx_buff1, 1, 100);
 			HAL_Delay(100);
 			/* code */
 			break;
 
 		case 2:
-			uint8_t tx_buff2[] = { 50, 32 };
-			symbol = 0;
-			HAL_UART_Transmit(&huart1, tx_buff2, 2, 100);
+			uint8_t tx_buff2[] = { 50 };
+			symbol = 15;
+			HAL_UART_Transmit(&huart1, tx_buff2, 1, 100);
 			HAL_Delay(100);
 			/* code */
 			break;
 
 		case 3:
-			uint8_t tx_buff3[] = { 51, 32 };
-			symbol = 0;
-			HAL_UART_Transmit(&huart1, tx_buff3, 2, 100);
+			uint8_t tx_buff3[] = { 51 };
+			symbol = 15;
+			HAL_UART_Transmit(&huart1, tx_buff3, 1, 100);
 			HAL_Delay(100);
 			/* code */
 			break;
 
 		case 4:
-			uint8_t tx_buff4[] = { 52, 32 };
-			symbol = 0;
-			HAL_UART_Transmit(&huart1, tx_buff4, 2, 100);
+			uint8_t tx_buff4[] = { 52 };
+			symbol = 15;
+			HAL_UART_Transmit(&huart1, tx_buff4, 1, 100);
 			HAL_Delay(100);
 			/* code */
 			break;
 		case 5:
-			uint8_t tx_buff5[] = { 53, 32 };
-			symbol = 0;
-			HAL_UART_Transmit(&huart1, tx_buff5, 2, 100);
+			uint8_t tx_buff5[] = { 53 };
+			symbol = 15;
+			HAL_UART_Transmit(&huart1, tx_buff5, 1, 100);
 			HAL_Delay(100);
 			/* code */
 			break;
 		case 6:
-			uint8_t tx_buff6[] = { 54, 32 };
-			symbol = 0;
-			HAL_UART_Transmit(&huart1, tx_buff6, 2, 100);
+			uint8_t tx_buff6[] = { 54 };
+			symbol = 15;
+			HAL_UART_Transmit(&huart1, tx_buff6, 1, 100);
 			HAL_Delay(100);
 			/* code */
 			break;
 		case 7:
-			uint8_t tx_buff7[] = { 55, 32 };
-			symbol = 0;
-			HAL_UART_Transmit(&huart1, tx_buff7, 2, 100);
+			uint8_t tx_buff7[] = { 55 };
+			symbol = 15;
+			HAL_UART_Transmit(&huart1, tx_buff7, 1, 100);
 			HAL_Delay(100);
 			/* code */
 			break;
 		case 8:
-			uint8_t tx_buff8[] = { 56, 32 };
-			symbol = 0;
-			HAL_UART_Transmit(&huart1, tx_buff8, 2, 100);
+			uint8_t tx_buff8[] = { 56 };
+			symbol = 15;
+			HAL_UART_Transmit(&huart1, tx_buff8, 1, 100);
 			HAL_Delay(100);
 			/* code */
 			break;
 		case 9:
-			uint8_t tx_buff9[] = { 57, 32 };
-			symbol = 0;
-			HAL_UART_Transmit(&huart1, tx_buff9, 2, 100);
+			uint8_t tx_buff9[] = { 57 };
+			symbol = 15;
+			HAL_UART_Transmit(&huart1, tx_buff9, 1, 100);
 			HAL_Delay(100);
 			/* code */
 			break;
 		case 10:
-			uint8_t tx_buff10[] = { 49, 48, 32 };
-			symbol = 0;
-			HAL_UART_Transmit(&huart1, tx_buff10, 3, 100);
+			uint8_t tx_buff10[] = { 12 };
+			symbol = 15;
+			HAL_UART_Transmit(&huart1, tx_buff10, 1, 100);
 			HAL_Delay(100);
 			/* code */
 			break;
 		case 11:
-			uint8_t tx_buff11[] = { 49, 49, 32 };
-			symbol = 0;
-			HAL_UART_Transmit(&huart1, tx_buff11, 3, 100);
-			HAL_Delay(100);
-			/* code */
-			break;
-		case 12:
-			uint8_t tx_buff12[] = { 49, 50, 32 };
-			symbol = 0;
-			HAL_UART_Transmit(&huart1, tx_buff12, 3, 100);
+			uint8_t tx_buff11[] = { 8,127 };
+			symbol = 15;
+			HAL_UART_Transmit(&huart1, tx_buff11, 2, 100);
 			HAL_Delay(100);
 			/* code */
 			break;
