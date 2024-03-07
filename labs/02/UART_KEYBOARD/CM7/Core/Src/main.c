@@ -135,6 +135,9 @@ int main(void) {
 	HAL_GPIO_WritePin(GPIOI, LED2_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOI, LED3_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOI, LED4_Pin, GPIO_PIN_SET);
+
+	// uint8_t tx_buff[] = { 65, 66, 67, 68, 69, 70, 71, 72, 73, 74 }; // ABCDEFGHIJ in ASCII code
+	uint8_t rx_buff[10];
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -144,59 +147,185 @@ int main(void) {
 		// Read data from KeyBoard
 		// KEYBOARD_X_Pin, where X=<1,7>
 
+		// MIRROR UART
+		if (HAL_UART_Receive(&huart1, rx_buff, 10, 100) == HAL_OK) //if transfer is successful
+				{
+			__NOP(); //You need to toggle a breakpoint on this line!
+		} else {
+			__NOP();
+		}
+		HAL_UART_Transmit(&huart1, rx_buff, 10, 100);
+		// first bit
+		if (rx_buff[0] == 49 || rx_buff[0] == 51 || rx_buff[0] == 53
+				|| rx_buff[0] == 55 || rx_buff[0] == 57)
+			HAL_GPIO_WritePin(GPIOI, LED1_Pin, GPIO_PIN_RESET);
+		else
+			HAL_GPIO_WritePin(GPIOI, LED1_Pin, GPIO_PIN_SET);
+		// second bit
+		if (rx_buff[0] == 50 || rx_buff[0] == 51 || rx_buff[0] == 54
+				|| rx_buff[0] == 55)
+			HAL_GPIO_WritePin(GPIOI, LED2_Pin, GPIO_PIN_RESET);
+		else
+			HAL_GPIO_WritePin(GPIOI, LED2_Pin, GPIO_PIN_SET);
+
+		// third bit
+		if (rx_buff[0] == 52 || rx_buff[0] == 53 || rx_buff[0] == 54
+				|| rx_buff[0] == 55)
+			HAL_GPIO_WritePin(GPIOI, LED3_Pin, GPIO_PIN_RESET);
+		else
+			HAL_GPIO_WritePin(GPIOI, LED3_Pin, GPIO_PIN_SET);
+
+		// fourth bit
+		if (rx_buff[0] == 56 || rx_buff[0] == 57)
+			HAL_GPIO_WritePin(GPIOI, LED4_Pin, GPIO_PIN_RESET);
+		else
+			HAL_GPIO_WritePin(GPIOI, LED4_Pin, GPIO_PIN_SET);
+
+		// clean the array for rx_buff
+		for (uint8_t i = 0; i < 10; ++i) {
+			rx_buff[i] = 0;
+		}
+		HAL_Delay(100);
+
+		// HAL_GPIO_TogglePin(GPIOI, LED1_Pin);
+		// HAL_Delay(100); /* Insert delay 100 ms */
+
+		// HAL_GPIO_TogglePin(GPIOI, LED2_Pin);
+		// HAL_Delay(100); /* Insert delay 100 ms */
+
+		// HAL_GPIO_TogglePin(GPIOI, LED3_Pin);
+		// HAL_Delay(100); /* Insert delay 100 ms */
+
+		// HAL_GPIO_TogglePin(GPIOI, LED4_Pin);
+		// HAL_Delay(100); /* Insert delay 100 ms */
+
 		// HAL_GPIO_(GPIOJ, KEYBOARD_1_Pin);
 		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_1_Pin, GPIO_PIN_SET);
 		if (!HAL_GPIO_ReadPin(GPIOF, KEYBOARD_4_Pin))
-			symbol = 0;
-		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_5_Pin))
 			symbol = 1;
-		if (!HAL_GPIO_ReadPin(GPIOA, KEYBOARD_6_Pin))
+		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_5_Pin))
 			symbol = 2;
-		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_7_Pin))
+		if (!HAL_GPIO_ReadPin(GPIOA, KEYBOARD_6_Pin))
 			symbol = 3;
+		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_7_Pin))
+			symbol = 4;
 		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_1_Pin, GPIO_PIN_RESET);
 
 		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_2_Pin, GPIO_PIN_SET);
 		if (!HAL_GPIO_ReadPin(GPIOF, KEYBOARD_4_Pin))
-			symbol = 4;
-		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_5_Pin))
 			symbol = 5;
-		if (!HAL_GPIO_ReadPin(GPIOA, KEYBOARD_6_Pin))
+		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_5_Pin))
 			symbol = 6;
-		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_7_Pin))
+		if (!HAL_GPIO_ReadPin(GPIOA, KEYBOARD_6_Pin))
 			symbol = 7;
+		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_7_Pin))
+			symbol = 8;
 		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_2_Pin, GPIO_PIN_RESET);
 
 		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_3_Pin, GPIO_PIN_SET);
 		if (!HAL_GPIO_ReadPin(GPIOF, KEYBOARD_4_Pin))
-			symbol = 8;
-		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_5_Pin))
 			symbol = 9;
-		if (!HAL_GPIO_ReadPin(GPIOA, KEYBOARD_6_Pin))
+		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_5_Pin))
 			symbol = 10;
-		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_7_Pin))
+		if (!HAL_GPIO_ReadPin(GPIOA, KEYBOARD_6_Pin))
 			symbol = 11;
+		if (!HAL_GPIO_ReadPin(GPIOJ, KEYBOARD_7_Pin))
+			symbol = 12;
 		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_3_Pin, GPIO_PIN_RESET);
 
-		if (symbol == 1) {
-			HAL_GPIO_TogglePin(GPIOI, LED1_Pin);
-			HAL_Delay(100); /* Insert delay 100 ms */
+		switch (symbol) {
+		case 1:
+			uint8_t tx_buff1[] = { 49, 32 };
+			symbol = 0;
+			HAL_UART_Transmit(&huart1, tx_buff1, 2, 100);
+			HAL_Delay(100);
+			/* code */
+			break;
+
+		case 2:
+			uint8_t tx_buff2[] = { 50, 32 };
+			symbol = 0;
+			HAL_UART_Transmit(&huart1, tx_buff2, 2, 100);
+			HAL_Delay(100);
+			/* code */
+			break;
+
+		case 3:
+			uint8_t tx_buff3[] = { 51, 32 };
+			symbol = 0;
+			HAL_UART_Transmit(&huart1, tx_buff3, 2, 100);
+			HAL_Delay(100);
+			/* code */
+			break;
+
+		case 4:
+			uint8_t tx_buff4[] = { 52, 32 };
+			symbol = 0;
+			HAL_UART_Transmit(&huart1, tx_buff4, 2, 100);
+			HAL_Delay(100);
+			/* code */
+			break;
+		case 5:
+			uint8_t tx_buff5[] = { 53, 32 };
+			symbol = 0;
+			HAL_UART_Transmit(&huart1, tx_buff5, 2, 100);
+			HAL_Delay(100);
+			/* code */
+			break;
+		case 6:
+			uint8_t tx_buff6[] = { 54, 32 };
+			symbol = 0;
+			HAL_UART_Transmit(&huart1, tx_buff6, 2, 100);
+			HAL_Delay(100);
+			/* code */
+			break;
+		case 7:
+			uint8_t tx_buff7[] = { 55, 32 };
+			symbol = 0;
+			HAL_UART_Transmit(&huart1, tx_buff7, 2, 100);
+			HAL_Delay(100);
+			/* code */
+			break;
+		case 8:
+			uint8_t tx_buff8[] = { 56, 32 };
+			symbol = 0;
+			HAL_UART_Transmit(&huart1, tx_buff8, 2, 100);
+			HAL_Delay(100);
+			/* code */
+			break;
+		case 9:
+			uint8_t tx_buff9[] = { 57, 32 };
+			symbol = 0;
+			HAL_UART_Transmit(&huart1, tx_buff9, 2, 100);
+			HAL_Delay(100);
+			/* code */
+			break;
+		case 10:
+			uint8_t tx_buff10[] = { 49, 48, 32 };
+			symbol = 0;
+			HAL_UART_Transmit(&huart1, tx_buff10, 3, 100);
+			HAL_Delay(100);
+			/* code */
+			break;
+		case 11:
+			uint8_t tx_buff11[] = { 49, 49, 32 };
+			symbol = 0;
+			HAL_UART_Transmit(&huart1, tx_buff11, 3, 100);
+			HAL_Delay(100);
+			/* code */
+			break;
+		case 12:
+			uint8_t tx_buff12[] = { 49, 50, 32 };
+			symbol = 0;
+			HAL_UART_Transmit(&huart1, tx_buff12, 3, 100);
+			HAL_Delay(100);
+			/* code */
+			break;
+
+		default:
+			break;
 		}
 
-		if (symbol == 2) {
-			HAL_GPIO_TogglePin(GPIOI, LED2_Pin);
-			HAL_Delay(100); /* Insert delay 100 ms */
-		}
-
-		if (symbol == 3) {
-			HAL_GPIO_TogglePin(GPIOI, LED3_Pin);
-			HAL_Delay(100); /* Insert delay 100 ms */
-		}
-
-		if (symbol == 4) {
-			HAL_GPIO_TogglePin(GPIOI, LED4_Pin);
-			HAL_Delay(100); /* Insert delay 100 ms */
-		}
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
@@ -356,8 +485,8 @@ static void MX_GPIO_Init(void) {
 			GPIO_PIN_RESET);
 
 	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOJ, KEYBOARD_1_Pin | KEYBOARD_2_Pin | KEYBOARD_3_Pin,
-			GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOJ,
+	KEYBOARD_1_Pin | KEYBOARD_2_Pin | KEYBOARD_3_Pin, GPIO_PIN_RESET);
 
 	/*Configure GPIO pin : CEC_CK_MCO1_Pin */
 	GPIO_InitStruct.Pin = CEC_CK_MCO1_Pin;
