@@ -156,11 +156,6 @@ int main(void) {
 		}
 		HAL_UART_Transmit(&huart1, rx_buff, 10, 100);
 
-		// clean the array for rx_buff
-		for (uint8_t i = 0; i < 10; ++i) {
-			rx_buff[i] = 0;
-		}
-
 		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_1_Pin, GPIO_PIN_RESET);
 		if (!HAL_GPIO_ReadPin(GPIOF, KEYBOARD_4_Pin))
 			symbol = 1;
@@ -271,6 +266,12 @@ int main(void) {
 			HAL_GPIO_WritePin(GPIOI, LED4_Pin, GPIO_PIN_RESET);
 		else
 			HAL_GPIO_WritePin(GPIOI, LED4_Pin, GPIO_PIN_SET);
+
+
+		// clean the array for rx_buff
+		for (uint8_t i = 0; i < 10; ++i) {
+			rx_buff[i] = 0;
+		}
 
 		/* USER CODE END WHILE */
 
