@@ -42,6 +42,8 @@
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
+#define EMPTY 15
+
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -129,14 +131,15 @@ int main(void) {
 	MX_GPIO_Init();
 	MX_USART1_UART_Init();
 	/* USER CODE BEGIN 2 */
-	uint8_t symbol = 0;
+
+	uint8_t symbol = EMPTY;
+
 	// turn off all LEDs
 	HAL_GPIO_WritePin(GPIOI, LED1_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOI, LED2_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOI, LED3_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOI, LED4_Pin, GPIO_PIN_SET);
 
-	// uint8_t tx_buff[] = { 65, 66, 67, 68, 69, 70, 71, 72, 73, 74 }; // ABCDEFGHIJ in ASCII code
 	uint8_t rx_buff[10];
 	/* USER CODE END 2 */
 
@@ -144,48 +147,19 @@ int main(void) {
 	/* USER CODE BEGIN WHILE */
 	while (1) {
 
-		// Read data from KeyBoard
-		// KEYBOARD_X_Pin, where X=<1,7>
-
 		// MIRROR UART
-		if (HAL_UART_Receive(&huart1, rx_buff, 10, 100) == HAL_OK) //if transfer is successful
+		if (HAL_UART_Receive(&huart1, rx_buff, 10, 100) == HAL_OK) // if transfer is successful
 				{
-			__NOP(); //You need to toggle a breakpoint on this line!
+			__NOP(); // You need to toggle a breakpoint on this line!
 		} else {
 			__NOP();
 		}
 		HAL_UART_Transmit(&huart1, rx_buff, 10, 100);
-		// first bit
-		if (rx_buff[0] == 49 || rx_buff[0] == 51 || rx_buff[0] == 53
-				|| rx_buff[0] == 55 || rx_buff[0] == 57)
-			HAL_GPIO_WritePin(GPIOI, LED1_Pin, GPIO_PIN_RESET);
-		else
-			HAL_GPIO_WritePin(GPIOI, LED1_Pin, GPIO_PIN_SET);
-		// second bit
-		if (rx_buff[0] == 50 || rx_buff[0] == 51 || rx_buff[0] == 54
-				|| rx_buff[0] == 55)
-			HAL_GPIO_WritePin(GPIOI, LED2_Pin, GPIO_PIN_RESET);
-		else
-			HAL_GPIO_WritePin(GPIOI, LED2_Pin, GPIO_PIN_SET);
-
-		// third bit
-		if (rx_buff[0] == 52 || rx_buff[0] == 53 || rx_buff[0] == 54
-				|| rx_buff[0] == 55)
-			HAL_GPIO_WritePin(GPIOI, LED3_Pin, GPIO_PIN_RESET);
-		else
-			HAL_GPIO_WritePin(GPIOI, LED3_Pin, GPIO_PIN_SET);
-
-		// fourth bit
-		if (rx_buff[0] == 56 || rx_buff[0] == 57)
-			HAL_GPIO_WritePin(GPIOI, LED4_Pin, GPIO_PIN_RESET);
-		else
-			HAL_GPIO_WritePin(GPIOI, LED4_Pin, GPIO_PIN_SET);
 
 		// clean the array for rx_buff
 		for (uint8_t i = 0; i < 10; ++i) {
 			rx_buff[i] = 0;
 		}
-		HAL_Delay(100);
 
 		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_1_Pin, GPIO_PIN_RESET);
 		if (!HAL_GPIO_ReadPin(GPIOF, KEYBOARD_4_Pin))
@@ -224,98 +198,79 @@ int main(void) {
 			symbol = 8;
 		HAL_GPIO_WritePin(GPIOJ, KEYBOARD_3_Pin, GPIO_PIN_SET);
 
-		switch (symbol) {
-		case 0:
-			uint8_t tx_buff0[] = { 48 };
-			symbol = 15;
-			HAL_UART_Transmit(&huart1, tx_buff0, 1, 100);
-			HAL_Delay(100);
-			/* code */
-			break;
-		case 1:
-			uint8_t tx_buff1[] = { 49 };
-			symbol = 15;
-			HAL_UART_Transmit(&huart1, tx_buff1, 1, 100);
-			HAL_Delay(100);
-			/* code */
-			break;
+		if (symbol != EMPTY) {
+			switch (symbol) {
+			case 0:
+				rx_buff[0] = 48;
+				break;
+			case 1:
+				rx_buff[0] = 49;
+				break;
+			case 2:
+				rx_buff[0] = 50;
+				break;
+			case 3:
+				rx_buff[0] = 51;
+				break;
+			case 4:
+				rx_buff[0] = 52;
+				break;
+			case 5:
+				rx_buff[0] = 53;
+				break;
+			case 6:
+				rx_buff[0] = 54;
+				break;
+			case 7:
+				rx_buff[0] = 55;
+				break;
+			case 8:
+				rx_buff[0] = 56;
+				break;
+			case 9:
+				rx_buff[0] = 57;
+				break;
+			case 10:
+				rx_buff[0] = 8;
+				break;
+			case 11:
+				rx_buff[0] = 127;
+				break;
 
-		case 2:
-			uint8_t tx_buff2[] = { 50 };
-			symbol = 15;
-			HAL_UART_Transmit(&huart1, tx_buff2, 1, 100);
-			HAL_Delay(100);
-			/* code */
-			break;
-
-		case 3:
-			uint8_t tx_buff3[] = { 51 };
-			symbol = 15;
-			HAL_UART_Transmit(&huart1, tx_buff3, 1, 100);
-			HAL_Delay(100);
-			/* code */
-			break;
-
-		case 4:
-			uint8_t tx_buff4[] = { 52 };
-			symbol = 15;
-			HAL_UART_Transmit(&huart1, tx_buff4, 1, 100);
-			HAL_Delay(100);
-			/* code */
-			break;
-		case 5:
-			uint8_t tx_buff5[] = { 53 };
-			symbol = 15;
-			HAL_UART_Transmit(&huart1, tx_buff5, 1, 100);
-			HAL_Delay(100);
-			/* code */
-			break;
-		case 6:
-			uint8_t tx_buff6[] = { 54 };
-			symbol = 15;
-			HAL_UART_Transmit(&huart1, tx_buff6, 1, 100);
-			HAL_Delay(100);
-			/* code */
-			break;
-		case 7:
-			uint8_t tx_buff7[] = { 55 };
-			symbol = 15;
-			HAL_UART_Transmit(&huart1, tx_buff7, 1, 100);
-			HAL_Delay(100);
-			/* code */
-			break;
-		case 8:
-			uint8_t tx_buff8[] = { 56 };
-			symbol = 15;
-			HAL_UART_Transmit(&huart1, tx_buff8, 1, 100);
-			HAL_Delay(100);
-			/* code */
-			break;
-		case 9:
-			uint8_t tx_buff9[] = { 57 };
-			symbol = 15;
-			HAL_UART_Transmit(&huart1, tx_buff9, 1, 100);
-			HAL_Delay(100);
-			/* code */
-			break;
-		case 10:
-			uint8_t tx_buff10[] = { 12 };
-			symbol = 15;
-			HAL_UART_Transmit(&huart1, tx_buff10, 1, 100);
-			HAL_Delay(100);
-			/* code */
-			break;
-		case 11:
-			uint8_t tx_buff11[] = { 8,127 };
-			symbol = 15;
-			HAL_UART_Transmit(&huart1, tx_buff11, 2, 100);
-			HAL_Delay(100);
-			/* code */
-			break;
-
-		default:
-			break;
+			default:
+				break;
+			}
+			symbol = EMPTY;
+			HAL_UART_Transmit(&huart1, rx_buff, 1, 10);
+			HAL_Delay(50);
 		}
+
+		// DISPLAY BINARY NUMBER BY LIGHT
+		// first bit
+		if (rx_buff[0] == 49 || rx_buff[0] == 51 || rx_buff[0] == 53
+				|| rx_buff[0] == 55 || rx_buff[0] == 57)
+			HAL_GPIO_WritePin(GPIOI, LED1_Pin, GPIO_PIN_RESET);
+		else
+			HAL_GPIO_WritePin(GPIOI, LED1_Pin, GPIO_PIN_SET);
+		// second bit
+		if (rx_buff[0] == 50 || rx_buff[0] == 51 || rx_buff[0] == 54
+				|| rx_buff[0] == 55)
+			HAL_GPIO_WritePin(GPIOI, LED2_Pin, GPIO_PIN_RESET);
+		else
+			HAL_GPIO_WritePin(GPIOI, LED2_Pin, GPIO_PIN_SET);
+
+		// third bit
+		if (rx_buff[0] == 52 || rx_buff[0] == 53 || rx_buff[0] == 54
+				|| rx_buff[0] == 55)
+			HAL_GPIO_WritePin(GPIOI, LED3_Pin, GPIO_PIN_RESET);
+		else
+			HAL_GPIO_WritePin(GPIOI, LED3_Pin, GPIO_PIN_SET);
+
+		// fourth bit
+		if (rx_buff[0] == 56 || rx_buff[0] == 57)
+			HAL_GPIO_WritePin(GPIOI, LED4_Pin, GPIO_PIN_RESET);
+		else
+			HAL_GPIO_WritePin(GPIOI, LED4_Pin, GPIO_PIN_SET);
 
 		/* USER CODE END WHILE */
 
@@ -476,8 +431,8 @@ static void MX_GPIO_Init(void) {
 			GPIO_PIN_RESET);
 
 	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOJ,
-	KEYBOARD_1_Pin | KEYBOARD_2_Pin | KEYBOARD_3_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOJ, KEYBOARD_1_Pin | KEYBOARD_2_Pin | KEYBOARD_3_Pin,
+			GPIO_PIN_RESET);
 
 	/*Configure GPIO pin : CEC_CK_MCO1_Pin */
 	GPIO_InitStruct.Pin = CEC_CK_MCO1_Pin;
