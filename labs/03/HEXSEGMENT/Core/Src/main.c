@@ -22,6 +22,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "inttypes.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,6 +56,42 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+uint8_t number0[7] = {1, 1, 1, 1, 1, 1, 0};
+uint8_t number1[7] = {0, 1, 1, 0, 0, 0, 0};
+uint8_t number2[7] = {1, 1, 0, 1, 1, 0, 0};
+uint8_t number3[7] = {1, 1, 1, 1, 0, 0, 1};
+uint8_t number4[7] = {0, 1, 1, 0, 0, 1, 1};
+uint8_t number5[7] = {1, 0, 1, 1, 0, 1, 1};
+uint8_t number6[7] = {1, 0, 1, 1, 1, 1, 1};
+uint8_t number7[7] = {1, 1, 1, 0, 0, 0, 0};
+uint8_t number8[7] = {1, 1, 1, 1, 1, 1, 1};
+uint8_t number9[7] = {1, 1, 1, 1, 0, 1, 1};
+
+static void pushClk()
+{
+   HAL_GPIO_WritePin(GPIOC, SR_Clk_Pin, GPIO_PIN_SET);
+   HAL_Delay(10);
+   HAL_GPIO_WritePin(GPIOC, SR_Dat_Pin, GPIO_PIN_RESET);
+   HAL_Delay(10);
+}
+
+static void pushClkOw()
+{
+   HAL_GPIO_WritePin(GPIOC, SR_Ow_Pin, GPIO_PIN_SET);
+   HAL_Delay(10);
+   HAL_GPIO_WritePin(GPIOC, SR_Ow_Pin, GPIO_PIN_RESET);
+   HAL_Delay(10);
+}
+
+void pushNumber(uint8_t number)
+{
+   if (number == 0) {
+      for (uint8_t i = 0; i < 7; ++i) {
+         // TODO
+      }
+   }
+}
 
 /* USER CODE END 0 */
 
@@ -94,9 +132,16 @@ int main(void)
    /* Infinite loop */
    /* USER CODE BEGIN WHILE */
    while (1) {
-      HAL_GPIO_WritePin(GPIOC, LD3_Pin, GPIO_PIN_SET);
-      HAL_Delay(1000);
-      HAL_GPIO_WritePin(GPIOC, LD3_Pin, GPIO_PIN_RESET);
+      for (uint8_t i = 0; i < 4; ++i) {
+         HAL_GPIO_WritePin(GPIOC, SR_Dat_Pin, GPIO_PIN_SET);
+         HAL_Delay(10);
+         pushClk();
+         HAL_Delay(10);
+         HAL_GPIO_WritePin(GPIOC, SR_Clk_Pin, GPIO_PIN_RESET);
+         HAL_Delay(10);
+         pushClk();
+      }
+      pushClkOw();
       HAL_Delay(1000);
       /* USER CODE END WHILE */
 
