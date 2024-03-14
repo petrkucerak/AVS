@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\output\processor_code.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\output\processor_code.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Thu Mar 14 21:39:44 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Thu Mar 14 21:57:10 2024
 <BR><P>
 <H3>Maximum Stack Usage =         56 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -224,21 +224,21 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sys_exit
 </UL>
 
-<P><STRONG><a name="[4c]"></a>delay</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, main.o(.text))
+<P><STRONG><a name="[4d]"></a>delay</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = delay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[44]"></a>main</STRONG> (Thumb, 98 bytes, Stack size 0 bytes, main.o(.text))
+<P><STRONG><a name="[44]"></a>main</STRONG> (Thumb, 106 bytes, Stack size 0 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = main &rArr; STM32vldiscovery_PBInit &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STM32vldiscovery_PBInit
-<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STM32vldiscovery_PBGetState
-<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STM32vldiscovery_LEDOn
-<LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STM32vldiscovery_LEDOff
+<LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STM32vldiscovery_PBGetState
+<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STM32vldiscovery_LEDOn
+<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STM32vldiscovery_LEDOff
 <LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STM32vldiscovery_LEDInit
-<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay
+<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
@@ -498,7 +498,7 @@ Global Symbols
 <P><STRONG><a name="[8e]"></a>GPIO_StructInit</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, stm32f10x_gpio.o(.text), UNUSED)
 
 <P><STRONG><a name="[5c]"></a>GPIO_ReadInputDataBit</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f10x_gpio.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STM32vldiscovery_PBGetState
+<BR><BR>[Called By]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STM32vldiscovery_PBGetState
 </UL>
 
 <P><STRONG><a name="[8f]"></a>GPIO_ReadInputData</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, stm32f10x_gpio.o(.text), UNUSED)
@@ -616,11 +616,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[4e]"></a>STM32vldiscovery_LEDOn</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, stm32vldiscovery.o(.text))
+<P><STRONG><a name="[4c]"></a>STM32vldiscovery_LEDOn</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, stm32vldiscovery.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[4f]"></a>STM32vldiscovery_LEDOff</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, stm32vldiscovery.o(.text))
+<P><STRONG><a name="[4e]"></a>STM32vldiscovery_LEDOff</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, stm32vldiscovery.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -638,7 +638,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[4d]"></a>STM32vldiscovery_PBGetState</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, stm32vldiscovery.o(.text))
+<P><STRONG><a name="[4f]"></a>STM32vldiscovery_PBGetState</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, stm32vldiscovery.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = STM32vldiscovery_PBGetState
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ReadInputDataBit

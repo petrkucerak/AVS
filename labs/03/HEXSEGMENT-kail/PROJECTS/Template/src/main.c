@@ -19,10 +19,12 @@ int main(void)
 
    while (1) {
       GPIOC->BSRR = GPIO_BSRR_BR9;
-      delay(0xFFFFFF);
+      STM32vldiscovery_LEDOn(LED4);
+      delay(0x0FFFFF);
 
       GPIOC->BSRR = GPIO_BSRR_BS9;
-      delay(0xFFFFFF);
+      STM32vldiscovery_LEDOff(LED4);
+      delay(0x0FFFFF);
 
       pom = STM32vldiscovery_PBGetState(Button_USER);
 
