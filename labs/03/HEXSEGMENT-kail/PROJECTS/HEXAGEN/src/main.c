@@ -1,40 +1,41 @@
 #include "stm32f10x.h"
+#include "stm32f10x_gpio.h"
+#include "stm32f10x_rcc.h"
 #include "stm32vldiscovery.h"
 
 void delay(vu32 nCount);
 
-int main(void) {   
-    int pom;
-    /* enable IO port C */
-	RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
+int main(void)
+{
 
-	/* configure GPIOC (PC9: output, 2MHz, push-pull) */
-	GPIOC->CRH = 0x44444424;
-    GPIOC->BSRR = GPIO_BSRR_BR9;
+   /* Structure declaration */
+   GPIO_InitTypeDef GPIO_InitStructure;
+   GPIO_StructInit(&GPIO_InitStructure);
 
-	/* program loop */
-	STM32vldiscovery_LEDInit(LED4);
-	STM32vldiscovery_PBInit(Button_USER, BUTTON_MODE_GPIO);
-	
-	while (1) {
-		GPIOC->BSRR = GPIO_BSRR_BR9;
-		delay(0x0FFFFF);
-    
-		GPIOC->BSRR = GPIO_BSRR_BS9;
-		delay(0x0FFFFF);
-		
-		pom = STM32vldiscovery_PBGetState(Button_USER);
-		
-		if (pom==1) STM32vldiscovery_LEDOn(LED4);
-			     else
-								STM32vldiscovery_LEDOff(LED4);
-		
-		
-		
-		
-	}
+   /* enable IO port C */
+   // RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
+   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+
+   // PC6 SR_Dat, PC7 SR_Ow, PC8 SR_Clk, PC9 LD3 [Green]
+   GPIO_InitStructure.GPIO_Pin =
+       GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
+   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+   GPIO_Init(GPIOC, &GPIO_InitStructure);
+
+   while (1) {
+      GPIO_SetBits(GPIOC, GPIO_Pin_9);
+      GPIO_SetBits(GPIOC, GPIO_Pin_8);
+      delay(1000000);
+
+      GPIO_ResetBits(GPIOC, GPIO_Pin_9);
+      GPIO_ResetBits(GPIOC, GPIO_Pin_8);
+      delay(1000000);
+   }
 }
 
-void delay(vu32 nCount) {
-  for(; nCount != 0; nCount--);
+void delay(vu32 nCount)
+{
+   for (; nCount != 0; nCount--)
+      ;
 }
