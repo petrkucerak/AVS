@@ -1,107 +1,58 @@
-# A .gitignore for Keil projects.
-# Taken mostly from http://www.keil.com/support/man/docs/uv4/uv4_b_filetypes.htm
+output
+# Created by https://www.toptal.com/developers/gitignore/api/keil
+# Edit at https://www.toptal.com/developers/gitignore?templates=keil
 
-# User-specific uVision files
-*.opt
-*.uvopt
-*.uvoptx
-*.uvgui
+### Keil ###
+# something maybe need to add
+# *.bat  # generate batch file
+# output/project_name # uv project generate without file ext
+# *.SRC # generate source file
+# *.src
+
+# Prerequisites
+*.d
+*.dep
+# Object files
+*.o
+*.obj
+*.OBJ
+
+# Listing Files
+*.COD
+*.cod
+*.[Ii]
+*.LST
+*.lst
+*.MAP
+*.map
+*.[Mm]51
+*.[Mm]66
+*.SCR
+*.scr
+
+# LINK output
+*.ABS
+
+# Libraries
+*.lib
+*.LIB
+
+
+# uv output
+*.lnp
+*.build_log.htm
+*.HEX
+*.hex
+
+
+# Build Files
+*._IA
+*.__[Ii]
+*._[Ii][Ii]
+
+# project
 *.uvgui.*
 *.uvguix.*
 
-# Listing files
-*.cod
-*.htm
-*.i
-*.lst
-*.map
-*.m51
-*.m66
-# define exception below if needed
-*.scr
 
-# Object and HEX files
-*.axf
-*.b[0-3][0-9]
-*.hex
-*.d
-*.crf
-*.elf
-*.hex
-*.h86
-*.lib
-*.obj
-*.o
-*.sbr
-
-# Build files
-# define exception below if needed
-*.bat
-*._ia
-*.__i
-*._ii
-
-# Generated output files
-/Listings/*
-/Objects/*
-
-# Debugger files
-# define exception below if needed
-#*.ini
-
-# Other files
-*.build_log.htm
-*.cdb
-*.dep
-*.ic
-*.lin
-*.lnp
-*.orc
-# define exception below if needed
-*.pack
-# define exception below if needed
-*.pdsc
-*.plg
-# define exception below if needed
-*.sct
-*.sfd
-*.sfr
-
-# Miscellaneous
-*.tra
-*.bin
-*.fed
-*.l1p
-*.l2p
-*.iex
-
-
-# For PCBs designed using KiCad: https://www.kicad.org/
-# Format documentation: https://kicad.org/help/file-formats/
-
-# Temporary files
-*.000
-*.bak
-*.bck
-*.kicad_pcb-bak
-*.kicad_sch-bak
-*-backups
-*.kicad_prl
-*.sch-bak
-*~
-_autosave-*
-*.tmp
-*-save.pro
-*-save.kicad_pcb
-fp-info-cache
-
-# Netlist files (exported from Eeschema)
-*.net
-
-# Autorouter files (exported from Pcbnew)
-*.dsn
-*.ses
-
-# Exported BOM files
-*.xml
-*.csv
+# End of https://www.toptal.com/developers/gitignore/api/keil

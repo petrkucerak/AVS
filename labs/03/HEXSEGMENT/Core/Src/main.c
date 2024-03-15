@@ -84,13 +84,32 @@ static void pushClkOw()
    HAL_Delay(10);
 }
 
+static void pushBit(uint8_t is_on)
+{
+   if (is_on) {
+      HAL_GPIO_WritePin(GPIOC, SR_Dat_Pin, GPIO_PIN_SET);
+      HAL_Delay(10);
+      pushClk();
+   } else {
+      HAL_GPIO_WritePin(GPIOC, SR_Dat_Pin, GPIO_PIN_RESET);
+      HAL_Delay(10);
+      pushClk();
+   }
+}
+
 void pushNumber(uint8_t number)
 {
    if (number == 0) {
       for (uint8_t i = 0; i < 7; ++i) {
-         // TODO
+         pushBit(number0[i]);
       }
    }
+   if (number == 1) {
+      for (uint8_t i = 0; i < 7; ++i) {
+         pushBit(number1[i]);
+      }
+   }
+   pushClkOw();
 }
 
 /* USER CODE END 0 */
@@ -132,16 +151,9 @@ int main(void)
    /* Infinite loop */
    /* USER CODE BEGIN WHILE */
    while (1) {
-      for (uint8_t i = 0; i < 4; ++i) {
-         HAL_GPIO_WritePin(GPIOC, SR_Dat_Pin, GPIO_PIN_SET);
-         HAL_Delay(10);
-         pushClk();
-         HAL_Delay(10);
-         HAL_GPIO_WritePin(GPIOC, SR_Clk_Pin, GPIO_PIN_RESET);
-         HAL_Delay(10);
-         pushClk();
-      }
-      pushClkOw();
+      pushNumber(0);
+      HAL_Delay(1000);
+      pushNumber(1);
       HAL_Delay(1000);
       /* USER CODE END WHILE */
 
