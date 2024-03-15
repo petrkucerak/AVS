@@ -29,9 +29,9 @@ int main(void)
 
    while (1) {
       uint8_t i;
-      for (i = 0; i < 99; ++i) {
+      for (i = 0; i < 100; ++i) {
          setNumber(i);
-         delay(1000000);
+         delay(500000);
       }
    }
 }
