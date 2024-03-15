@@ -5,6 +5,10 @@
 
 void delay(vu32 nCount);
 
+void pulseClk(void);
+void pulseOw(void);
+void setNumber(uint8_t number);
+
 int main(void)
 {
 
@@ -24,14 +28,41 @@ int main(void)
    GPIO_Init(GPIOC, &GPIO_InitStructure);
 
    while (1) {
-      GPIO_SetBits(GPIOC, GPIO_Pin_9);
-      GPIO_SetBits(GPIOC, GPIO_Pin_8);
-      delay(1000000);
-
-      GPIO_ResetBits(GPIOC, GPIO_Pin_9);
-      GPIO_ResetBits(GPIOC, GPIO_Pin_8);
-      delay(1000000);
+      setNumber(0);
+      delay(100000);
    }
+}
+
+void pulseClk(void)
+{
+   GPIO_SetBits(GPIOC, GPIO_Pin_8);
+   delay(100);
+   GPIO_ResetBits(GPIOC, GPIO_Pin_8);
+}
+
+void pulseOw(void)
+{
+   GPIO_SetBits(GPIOC, GPIO_Pin_7);
+   delay(100);
+   GPIO_ResetBits(GPIOC, GPIO_Pin_7);
+}
+
+void setNumber(uint8_t number)
+{
+   uint8_t number0[8] = {1, 1, 1, 1, 1, 1, 0, 0};
+   uint8_t i;
+   if (number == 0) {
+      for (i = 0; i < 8; ++i) {
+         if (!number0[i])
+            GPIO_SetBits(GPIOC, GPIO_Pin_6);
+         else
+            GPIO_ResetBits(GPIOC, GPIO_Pin_6);
+         delay(100);
+         pulseClk();
+         delay(100);
+      }
+   }
+   pulseOw();
 }
 
 void delay(vu32 nCount)
