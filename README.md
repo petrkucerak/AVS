@@ -19,3 +19,11 @@ When the touch display is pressed, the device changes the blinking style of the 
 The device communicates via UART (speed 115200), reads data (numbers) from a matrix keyboard and a UART terminal. The particular pressed key is displayed in binary using the built-in LEDs and shown on the UART. The video demonstrates this.
 
 ![Solution lab 02](assets/02.gif)
+
+### 3. Hexsegment
+
+Using CTU FEE AVS STM32 kit rev.1 with STLink - v1. MCU control hexsegment and iterate from $00$ to $99$.
+
+Used Kail project in folder `HEXSEGMENT-kail`.
+
+![Solution lab 03](assets/03.gif)
