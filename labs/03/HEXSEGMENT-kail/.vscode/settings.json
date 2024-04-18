@@ -1,7 +1,0 @@
-{
-   "files.associations": {
-      "stm32vldiscovery.h": "c",
-      "stm32f10x_rcc.h": "c",
-      "stm32f10x_gpio.h": "c"
-   }
-}
