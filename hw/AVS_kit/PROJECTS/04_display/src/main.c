@@ -20,12 +20,17 @@ int main(void)
    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
 
    /* Define A peripherals */
-   /* PA4 [SPI1_NSS], PA5 [SPI1_SCK], PA6 [SPI1_MISO], PA7 [SPI1_MOSI] */
+   /* PA5[SPI1_SCK], PA6[SPI1_MISO], PA7[SPI1_MOSI] as alternative function */
    GPIO_StructInit(&GPIOA_InitStructure);
-   GPIOA_InitStructure.GPIO_Pin =
-       GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+   GPIOA_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
    GPIOA_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
    GPIOA_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+   GPIO_Init(GPIOA, &GPIOA_InitStructure);
+   /* PA4 [SPI_NSS (known as CS too)] as alternative function */
+   GPIO_StructInit(&GPIOA_InitStructure);
+   GPIOA_InitStructure.GPIO_Pin = GPIO_Pin_4;
+   GPIOA_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   GPIOA_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
    GPIO_Init(GPIOA, &GPIOA_InitStructure);
 
    /* Define C peripherals */
@@ -36,7 +41,7 @@ int main(void)
    GPIOC_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
    GPIO_Init(GPIOC, &GPIOC_InitStructure);
 
-   /* SPI 1 configuration */
+   /* SPI1 configuration */
    SPI_StructInit(&SPI_InitStructure);
    SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
    SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
