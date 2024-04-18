@@ -1,3 +1,4 @@
+#include "lcd_graph_commands.h"
 #include "stm32f10x.h"
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_rcc.h"
@@ -5,6 +6,7 @@
 #include "stm32vldiscovery.h"
 
 void delay(vu32 nCount);
+static void LCD_SendByte(uint8_t byte);
 
 int main(void)
 {
@@ -71,4 +73,21 @@ void delay(vu32 nCount)
 {
    for (; nCount != 0; nCount--)
       ;
+}
+
+static void LCD_SendByte(uint8_t byte)
+{
+   /* Loop while DR register in not empty */
+   while (SPI_I2S_GetFlagStatus(LCD_SPI, SPI_I2S_FLAG_TXE) == RESET)
+      ;
+
+   /* Send byte through the SPI1 peripheral */
+   SPI_I2S_SendData(LCD_SPI, byte);
+
+   /* Wait to receive a byte */
+   while (SPI_I2S_GetFlagStatus(LCD_SPI, SPI_I2S_FLAG_RXNE) == RESET)
+      ;
+
+   /* Return the byte read from the SPI bus */
+   SPI_I2S_ReceiveData(LCD_SPI);
 }
