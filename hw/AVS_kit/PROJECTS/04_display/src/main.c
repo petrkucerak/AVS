@@ -14,6 +14,7 @@ static void LCD_SendCommand(uint8_t byte);
 static void LCD_SendData(uint8_t byte);
 static void LCD_ClearDisplay(void);
 static void LCD_SetPos(uint8_t line, uint8_t column);
+static void LCD_DisplayChar(uint8_t column, uint16_t line, uint8_t ascii);
 
 int main(void)
 {
@@ -103,15 +104,12 @@ int main(void)
    /* Clear display */
    LCD_ClearDisplay();
 
-   LCD_SendData(0x00);
-   delay(SMALL_DELAY);
+   LCD_DisplayChar(80, 4, 'a');
+   LCD_DisplayChar(20, 24, 'b');
+   LCD_DisplayChar(8, 40, 'f');
 
    while (1) {
-
-      LCD_SendData(0xFF);
-      delay(1000000);
-      LCD_SendCommand(CMD_SET_COLUMN_LOWER);
-      LCD_SendCommand(CMD_DISPLAY_ON);
+      delay(10000);
    }
 }
 
@@ -184,4 +182,20 @@ static void LCD_SetPos(uint8_t line, uint8_t column)
    LCD_SendCommand(CMD_SET_COLUMN_LOWER | ((column) & 0xf));
    LCD_SendCommand(CMD_SET_COLUMN_UPPER | (((column) >> 4) & 0x0F));
    LCD_SendCommand(CMD_RMW);
+}
+
+/**
+ * @brief Display char
+ *
+ * @param column
+ * @param line
+ * @param ascii
+ */
+static void LCD_DisplayChar(uint8_t column, uint16_t line, uint8_t ascii)
+{
+   int i;
+   for (i = 0; i < 5; i++) {
+      LCD_SetPos(line, column++);
+      LCD_SendData(font5x8[(ascii * 5) + 5 - i - 1]);
+   }
 }
