@@ -1,6 +1,12 @@
 #ifndef __LCD_GRAPH_COMMANDS_H
 #define __LCD_GRAPH_COMMANDS_H
 
+#define LCD_PIXEL_WIDTH 128
+#define LCD_PIXEL_HEIGHT 64
+
+#define LCD_CENTER_X (LCD_PIXEL_WIDTH / 2)
+#define LCD_CENTER_Y (LCD_PIXEL_HEIGHT / 2)
+
 #define CMD_DISPLAY_ON          0xAF
 #define CMD_DISPLAY_OFF         0xAE
  
