@@ -6,7 +6,7 @@
 #include "stm32f10x_spi.h"
 #include "stm32vldiscovery.h"
 
-#define SMALL_DELAY 50
+#define SMALL_DELAY 100
 
 void delay(vu32 nCount);
 static void LCD_SendByte(uint8_t byte);
@@ -15,6 +15,7 @@ static void LCD_SendData(uint8_t byte);
 static void LCD_ClearDisplay(void);
 static void LCD_SetPos(uint8_t line, uint8_t column);
 static void LCD_DisplayChar(uint8_t column, uint16_t line, uint8_t ascii);
+static void LED_blik(uint8_t time);
 
 int main(void)
 {
@@ -44,10 +45,10 @@ int main(void)
 
    /* PB5 [DSP_CS (also known as CS too)] */
    GPIO_StructInit(&GPIOB_InitStructure);
-   GPIOB_InitStructure.GPIO_Pin = GPIO_Pin_4;
+   GPIOB_InitStructure.GPIO_Pin = GPIO_Pin_5;
    GPIOB_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
    GPIOB_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-   GPIO_Init(GPIOA, &GPIOB_InitStructure);
+   GPIO_Init(GPIOB, &GPIOB_InitStructure);
 
    /* Define C peripherals */
    /* PC8 LD4 [Blue], PC9 LD3 [Green] */
@@ -63,7 +64,7 @@ int main(void)
    GPIOD_InitStructure.GPIO_Pin = GPIO_Pin_2;
    GPIOD_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
    GPIOD_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-   GPIO_Init(GPIOA, &GPIOD_InitStructure);
+   GPIO_Init(GPIOD, &GPIOD_InitStructure);
 
    /* SPI1 configuration */
    SPI_StructInit(&SPI_InitStructure);
@@ -80,8 +81,7 @@ int main(void)
 
    /* Enable the SPI1  */
    SPI_Cmd(SPI1, ENABLE);
-   /* Set CS to LOW to activate SPI communication */
-   GPIO_ResetBits(GPIOB, GPIO_Pin_5);
+   
    delay(SMALL_DELAY);
 
    /* Init LCD */
@@ -94,19 +94,43 @@ int main(void)
    LCD_SendCommand(CMD_SET_POWER_CONTROL | 0x4); // VC=1, VR =0, VF = 0
    LCD_SendCommand(CMD_SET_POWER_CONTROL | 0x6); // VC=1, VR =1, VF = 0
    LCD_SendCommand(CMD_SET_POWER_CONTROL | 0x7); // VC=1, VR =1, VF = 1
-   LCD_SendCommand(CMD_SET_RESISTOR_RATIO |
-                   0x6); // regulator resistor, ref. voltage R
+   LCD_SendCommand(CMD_SET_RESISTOR_RATIO | 0x6);
    LCD_SendCommand(CMD_SET_VOLUME_FIRST);
    LCD_SendCommand(CMD_SET_VOLUME_SECOND |
                    (0x10 & 0x3f)); // contrast settings - usable range 0x05-0x20
    LCD_SendCommand(CMD_DISPLAY_ON); // turn on the display
+   delay(SMALL_DELAY);
+
+   // LED_blik(10000);
+   // LCD_SendCommand(CMD_SET_ALLPTS_ON);
+   // delay(1000000);
+   // LED_blik(10000);
+   // LCD_SendCommand(CMD_SET_ALLPTS_NORMAL);
+   // LED_blik(10000);
 
    /* Clear display */
    LCD_ClearDisplay();
 
-   LCD_DisplayChar(80, 4, 'a');
-   LCD_DisplayChar(20, 24, 'b');
-   LCD_DisplayChar(8, 40, 'f');
+   LCD_DisplayChar(80, 4, 'c');
+   delay(1000000);
+   LCD_DisplayChar(88, 4, 'b');
+   delay(1000000);
+   LCD_DisplayChar(128, 0, 'f');
+   delay(1000000);
+   LCD_DisplayChar(128, 1, 'f');
+   delay(1000000);
+   LCD_DisplayChar(128, 2, 'f');
+   delay(1000000);
+   LCD_DisplayChar(128, 3, 'f');
+   delay(1000000);
+   LCD_DisplayChar(128, 4, 'f');
+   delay(1000000);
+   LCD_DisplayChar(128, 5, 'f');
+   delay(1000000);
+   LCD_DisplayChar(128, 6, 'f');
+   delay(1000000);
+   LCD_DisplayChar(128, 7, 'f');
+   delay(1000000);
 
    while (1) {
       delay(10000);
@@ -121,6 +145,12 @@ void delay(vu32 nCount)
 
 static void LCD_SendByte(uint8_t byte)
 {
+
+   /* Set CS to LOW to activate SPI communication */
+   GPIO_ResetBits(GPIOB, GPIO_Pin_5);
+
+   delay(SMALL_DELAY);
+
    /* Loop while DR register in not emplty */
    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET)
       ;
@@ -134,6 +164,11 @@ static void LCD_SendByte(uint8_t byte)
 
    /* Return the byte read from the SPI bus */
    SPI_I2S_ReceiveData(SPI1);
+
+   
+   /* Set CS to LOW to activate SPI communication */
+   GPIO_SetBits(GPIOB, GPIO_Pin_5);
+   delay(SMALL_DELAY);
 }
 
 static void LCD_SendCommand(uint8_t byte)
@@ -163,7 +198,7 @@ static void LCD_ClearDisplay(void)
       LCD_SendCommand(CMD_SET_COLUMN_LOWER | 0);
       LCD_SendCommand(CMD_SET_COLUMN_UPPER | 0);
       LCD_SendCommand(CMD_RMW);
-      column = LCD_PIXEL_WIDTH;
+      column = LCD_PIXEL_WIDTH + 4;
       while (column--) {
          LCD_SendData(0x00);
       }
@@ -187,8 +222,8 @@ static void LCD_SetPos(uint8_t line, uint8_t column)
 /**
  * @brief Display char
  *
- * @param column
- * @param line
+ * @param column 0, 8, 16, ..., 128
+ * @param line 0, 1, ..., 7
  * @param ascii
  */
 static void LCD_DisplayChar(uint8_t column, uint16_t line, uint8_t ascii)
@@ -198,4 +233,10 @@ static void LCD_DisplayChar(uint8_t column, uint16_t line, uint8_t ascii)
       LCD_SetPos(line, column++);
       LCD_SendData(font5x8[(ascii * 5) + 5 - i - 1]);
    }
+}
+
+static void LED_blik(uint8_t time){
+   GPIO_SetBits(GPIOC, GPIO_Pin_8);
+   delay(time);
+   GPIO_ResetBits(GPIOC, GPIO_Pin_8);
 }
