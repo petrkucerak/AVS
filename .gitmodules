@@ -1,0 +1,3 @@
+[submodule "safe-critical-toaster"]
+	path = safe-critical-toaster
+	url = https://github.com/petrkucerak/safe-critical-toaster.git
